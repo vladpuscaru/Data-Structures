@@ -122,6 +122,7 @@
     <ClInclude Include="Lista_Dublu_Inlantuita.h" />
     <ClInclude Include="Lista_Simplu_Inlantuita.h" />
     <ClInclude Include="Produs.h" />
+    <ClInclude Include="Stiva.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

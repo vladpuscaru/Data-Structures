@@ -29,5 +29,8 @@
     <ClInclude Include="Lista_Dublu_Inlantuita.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Stiva.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
