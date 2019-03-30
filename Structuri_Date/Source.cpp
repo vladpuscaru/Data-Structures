@@ -1,27 +1,32 @@
+#include "Lista_Simplu_Inlantuita.h"
 #include "Lista_Dublu_Inlantuita.h"
 
 int main() {
 
 	char numeFisier[20] = "produse.txt";
-	/*nodls* cap = citireFisierLS(numeFisier);
 
+#pragma region Lista Simplu Inlantuita
+	printf("\n\n----------------------------- Lista Simplu Inlantuita -----------------------------\n");
+	nodls* cap = citireFisierLS(numeFisier);
 	traversareLS(cap);
+	dezalocareLS(cap);
+#pragma endregion
 
-	printf("\n\nDUPA STERGERE ID\n");
-	int a = stergereLS_dupaId(&cap, 1019);
-	int b = stergereLS_dupaId(&cap, 1007);
-	int x = stergereLS_dupaPozitie(&cap, 2);
-	traversareLS(cap);
-
-	dezalocareLS(cap);*/
-
+#pragma region Lista Dublu Inlantuita
+	printf("\n\n----------------------------- Lista Dublu Inlantuita -----------------------------\n");
 	nodld* prim = NULL;
 	nodld* ultim = NULL;
-
 	citireFisierLD(numeFisier, &prim, &ultim);
 	traversareLD(prim);
-	printf("\n\n-======================-\n");
+	printf("\n\n[][][] Traversare inversa [][][]\n");
 	traversareLD_invers(ultim);
+	dezalocareLD(prim);
+#pragma endregion
+
+
+	
+
+	getchar();
 
 	return 0;
 }

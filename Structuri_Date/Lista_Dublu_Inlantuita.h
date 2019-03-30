@@ -78,25 +78,137 @@ void inserareLD_sfarsit(nodld** prim, nodld** ultim, produs p) {
 
 // stergere de la inceput [0 - a sters | -1 - nu a sters(lista goala)]
 int stergereLD_inceput(nodld** prim, nodld** ultim) {
-	return 0;
+	// caz in care lista e goala
+	if (*prim == NULL && *ultim == NULL)
+		return -1;
+	// caz in care lista are un singur element(care va fi sters)
+	else if (*prim == *ultim) {
+		free((*prim)->inf.denumire);
+		free((*prim)->inf.stocMagazine);
+		free((*prim));
+		*prim = NULL;
+		*ultim = NULL;
+	}
+	// caz in care lista are mai multe elemente
+	else {
+		nodld* nodDeSters = *prim;
+		*prim = (*prim)->next;
+		(*prim)->prev = NULL;
 
+		free(nodDeSters->inf.denumire);
+		free(nodDeSters->inf.stocMagazine);
+		free(nodDeSters);
+	}
+	return 0;
 }
 
 // stergere de la sfarsit [0 - a sters | -1 - nu a sters(lista goala)]
 int stergereLD_sfarsit(nodld** prim, nodld** ultim) {
-	return 0;
+	// caz in care lista e goala
+	if (*ultim == NULL)
+		return -1;
+	// caz in care lista are un singur element(care va fi sters)
+	else if (*prim == *ultim) {
+		free((*prim)->inf.denumire);
+		free((*prim)->inf.stocMagazine);
+		free((*prim));
+		*prim = NULL;
+		*ultim = NULL;
+	}
+	// caz in care lista are elemente
+	else {
+		nodld* nodDeSters = *ultim;
+		*ultim = (*ultim)->prev;
+		(*ultim)->next = NULL;
 
+		free(nodDeSters->inf.denumire);
+		free(nodDeSters->inf.stocMagazine);
+		free(nodDeSters);
+	}
+	return 0;
 }
 
 // stergere dupa id produs [0 - a sters | -1 - nu a sters(lista goala) | -2 - nu a sters(produsul nu exista)]
 int stergereLD_dupaId(nodld** prim, nodld** ultim, int id) {
-	return 0;
+	int gasit = 0;
+	// caz in care lista e goala
+	if (*prim == NULL && *ultim == NULL)
+		return -1;
+	// caz in care elementul cautat este primul element
+	else if ((*prim)->inf.id == id) {
+		gasit = 1;
+		stergereLD_inceput(prim, ultim);
+	}
+	// caz in care elementul cautat este ultimul element
+	else if ((*ultim)->inf.id == id) {
+		gasit = 1;
+		stergereLD_sfarsit(prim, ultim);
+	}
+	// caz in care lista are elemente
+	else {
+		nodld* temp = *prim;
+		while (temp != NULL && !gasit) {
+			if (temp->inf.id == id) {
+				gasit = 1;
+				nodld* nodDeSters = temp;
+				temp = temp->prev;
+				temp->next = nodDeSters->next;
+				nodDeSters->prev = temp;
 
+				free(nodDeSters->inf.denumire);
+				free(nodDeSters->inf.stocMagazine);
+				free(nodDeSters);
+			}
+			temp = temp->next;
+		}
+	}
+
+	return gasit == 1 ? 0 : -1;
 }
 
 // stergere dupa pozitie [0 - a sters | -1 - nu a sters(lista goala) | -2 - nu a sters(pozitie in afara range-ului) | -3 - nu a sters(produsul nu exista)]
 int stergereLD_dupaPozitie(nodld** prim, nodld** ultim, int poz) {
-	return 0;
+	int gasit = 0;
+	int nrElemente = getNrElementeLD(*prim);
+	// caz in care lista e goala
+	if (*prim == NULL && *ultim == NULL)
+		return -1;
+	// caz in care pozitia = 0
+	else if (poz == 0) {
+		gasit = 1;
+		stergereLD_inceput(prim, ultim);
+	}
+	// caz in care pozitia = nrElemente - 1 (ultimul element)
+	else if (poz == nrElemente - 1) {
+		gasit = 1;
+		stergereLD_sfarsit(prim, ultim);
+	}
+	// caz in care pozitia este in afara rangeului
+	else if (poz < 0 || poz >= nrElemente) {
+		return -2;
+	}
+	// caz in care elementul trebuie cautat
+	else {
+		nodld* temp = (*prim)->next;
+		int index = 1;
+		while (temp->next != NULL && !gasit) {
+			if (index == poz) {
+				gasit = 1;
+				nodld* nodDeSters = temp;
+				temp = temp->prev;
+				temp->next = nodDeSters->next;
+				nodDeSters->prev = temp;
+
+				free(nodDeSters->inf.denumire);
+				free(nodDeSters->inf.stocMagazine);
+				free(nodDeSters);
+			}
+			temp = temp->next;
+			index++;
+		}
+	}
+
+	return gasit == 1 ? 0 : -3;
 }
 
 // traversare si afisare
@@ -121,7 +233,14 @@ void traversareLD_invers(nodld* ultim) {
 
 // dezalocare memorie
 void dezalocareLD(nodld* prim) {
-	
+	nodld* temp = prim;
+	while (temp != NULL) {
+		nodld* aux = temp->next;
+		free(temp->inf.denumire);
+		free(temp->inf.stocMagazine);
+		free(temp);
+		temp = aux;
+	}
 }
 
 // creare lista cu date din fisier
