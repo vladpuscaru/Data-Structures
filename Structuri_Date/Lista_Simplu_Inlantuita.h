@@ -63,6 +63,7 @@ void inserareLS_sfarsit(nodls** cap, produs p) {
 
 	/// inserare nod in lista(la sfarsit)
 	// caz in care lista este goala
+
 	if (*cap == NULL) {
 		*cap = nou;
 	}
@@ -74,6 +75,57 @@ void inserareLS_sfarsit(nodls** cap, produs p) {
 		}
 		temp->next = nou;
 	}
+}
+
+// inserare dupa un anumit element [0 - a adaugat | -1 - nu a adaugat(lista goala) | -2 - nu a adaugat(produsul cu id X nu exista)]
+int inserareLS_dupaId(nodls** cap, produs pAnterior, produs pNou) {
+	int inserat = 0;
+
+	// caz in care lista e goala
+	if (*cap == NULL) {
+		return -1;
+	}
+	// caz in care lista are elemente
+	else {
+		// verificare primul element
+		if ((*cap)->inf.id == pAnterior.id) {
+			// creare si initializare nod nou
+			nodls* nou = creareNodNou(pNou);
+
+			// adaugare nod in lista
+			nou->next = (*cap)->next;
+			(*cap)->next = nou;
+
+			// setare flag
+			inserat = 1;
+		}
+		// cautare element anterior
+		nodls* temp = (*cap)->next;
+		while (temp->next != NULL && !inserat) {
+			if (temp->next->inf.id == pAnterior.id) {
+				// creare si initializare nod nou
+				nodls* nou = creareNodNou(pNou);
+
+				// adaugare in lista
+				nou->next = temp->next->next;
+				temp->next->next = nou;
+
+				// setare flag
+				inserat = 1;
+			}
+			temp = temp->next;
+		}
+		// verificare ultimul element
+		if (!inserat && temp->inf.id == pAnterior.id) {
+			// adaugare in lista
+			inserareLS_sfarsit(cap, pNou);
+
+			// setare flag
+			inserat = 1;
+		}
+	}
+
+	return inserat == 1 ? 0 : -2;
 }
 
 // stergere de la inceput [0 - a sters | -1 - nu a sters(lista goala)]
