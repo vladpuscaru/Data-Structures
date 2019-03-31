@@ -119,6 +119,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Coada.h" />
     <ClInclude Include="Lista_Dublu_Inlantuita.h" />
     <ClInclude Include="Lista_Simplu_Inlantuita.h" />
     <ClInclude Include="Produs.h" />
